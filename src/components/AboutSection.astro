@@ -2,25 +2,26 @@
 import { restaurant } from '@/data/restaurant.config';
 ---
 
-<section id="about" class="scroll-mt-24 bg-cream-50 py-20 sm:py-28">
-  <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+<section id="about" class="scroll-mt-24 bg-cream-50 py-12 sm:py-28">
+  <div class="container-page grid items-center gap-6 lg:grid-cols-2 lg:gap-20">
+    {/* Mobile: one compact photo (the other two are desktop/tablet-only) */}
     <div class="grid grid-cols-2 gap-4">
       <img
         src="/images/pizza-dough-fresh.jpg"
         alt="Handgeformter Pizzateig, bereit für den Ofen"
-        class="col-span-2 aspect-[16/10] w-full rounded-2xl object-cover shadow-card"
+        class="col-span-2 aspect-[16/9] w-full rounded-2xl object-cover shadow-card sm:aspect-[16/10]"
         loading="lazy"
       />
       <img
         src="/images/gallery-guest-enjoying.jpg"
         alt="Gast genießt sein Essen im Restaurant"
-        class="aspect-[3/4] w-full rounded-2xl object-cover shadow-card"
+        class="hidden aspect-[3/4] w-full rounded-2xl object-cover shadow-card sm:block"
         loading="lazy"
       />
       <img
         src="/images/gallery-interior-warm.jpg"
         alt="Warmer, einladender Gastraum"
-        class="aspect-[3/4] w-full rounded-2xl object-cover shadow-card"
+        class="hidden aspect-[3/4] w-full rounded-2xl object-cover shadow-card sm:block"
         loading="lazy"
       />
     </div>

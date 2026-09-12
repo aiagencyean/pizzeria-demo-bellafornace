@@ -3,22 +3,22 @@ import { restaurant } from '@/data/restaurant.config';
 ---
 
 <section class="relative overflow-hidden bg-cream-50">
-  <div class="container-page grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-2 lg:py-28">
+  <div class="container-page grid items-center gap-6 py-10 sm:gap-12 sm:py-20 lg:grid-cols-2 lg:py-28">
     <div class="relative z-10 max-w-xl animate-slide-up">
       <p class="eyebrow">Wood-fired · seit {restaurant.founded}</p>
-      <h1 class="mt-4 text-5xl font-medium leading-[1.05] text-charcoal-900 sm:text-6xl lg:text-[3.75rem]">
+      <h1 class="mt-4 text-4xl font-medium leading-[1.05] text-charcoal-900 sm:text-6xl lg:text-[3.75rem]">
         {restaurant.tagline}
       </h1>
-      <p class="mt-6 max-w-md text-lg text-charcoal-900/70">
+      <p class="mt-4 max-w-md text-base text-charcoal-900/70 sm:mt-6 sm:text-lg">
         48 Stunden gereifter Teig, San-Marzano-Tomaten und frische Mozzarella —
         gebacken im Holzofen, geliefert direkt zu dir.
       </p>
-      <div class="mt-8 flex flex-wrap items-center gap-4">
+      <div class="mt-6 flex flex-wrap items-center gap-3 sm:mt-8 sm:gap-4">
         <a href="/menu" class="btn-primary text-base">Jetzt bestellen</a>
         <a href="/menu" class="btn-outline text-base">Speisekarte ansehen</a>
       </div>
 
-      <div class="mt-10 flex items-center gap-6 text-sm text-charcoal-900/60">
+      <div class="mt-6 flex items-center gap-6 text-sm text-charcoal-900/60 sm:mt-10">
         <div class="flex items-center gap-1.5">
           <span class="flex text-gold-500">
             {Array.from({ length: 5 }).map(() => (
@@ -34,7 +34,7 @@ import { restaurant } from '@/data/restaurant.config';
     </div>
 
     <div class="relative animate-fade-in [animation-delay:150ms]">
-      <div class="relative mx-auto aspect-square w-full max-w-[520px]">
+      <div class="relative mx-auto aspect-square w-full max-w-[240px] sm:max-w-[520px]">
         <div class="absolute inset-6 rounded-full bg-tomato-400/20 blur-3xl" aria-hidden="true"></div>
         <img
           src="/images/hero-margherita.jpg"

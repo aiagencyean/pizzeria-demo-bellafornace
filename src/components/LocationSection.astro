@@ -2,8 +2,8 @@
 import { restaurant } from '@/data/restaurant.config';
 ---
 
-<section id="standort" class="scroll-mt-24 bg-cream-100 py-20 sm:py-28">
-  <div class="container-page grid gap-10 lg:grid-cols-2 lg:gap-16">
+<section id="standort" class="scroll-mt-24 bg-cream-100 py-12 sm:py-28">
+  <div class="container-page grid gap-8 lg:grid-cols-2 lg:gap-16">
     <div>
       <p class="eyebrow">Besuch uns</p>
       <h2 class="section-heading mt-3">Finde uns in {restaurant.address.city}</h2>
@@ -47,7 +47,7 @@ import { restaurant } from '@/data/restaurant.config';
       Map placeholder — swap this block for a real Google Maps / Mapbox
       embed using restaurant.mapCoordinates once an API key is available.
     -->
-    <div class="relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-2xl bg-charcoal-900/5 shadow-card">
+    <div class="relative flex min-h-[200px] items-center justify-center overflow-hidden rounded-2xl bg-charcoal-900/5 shadow-card sm:min-h-[320px]">
       <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 1px 1px, rgba(28,26,23,0.15) 1px, transparent 0); background-size: 24px 24px;"></div>
       <div class="relative flex flex-col items-center gap-2 text-center">
         <span class="flex h-12 w-12 items-center justify-center rounded-full bg-tomato-500 text-2xl text-white shadow-lifted">📍</span>

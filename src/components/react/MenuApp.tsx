@@ -40,7 +40,7 @@ export default function MenuApp({ initialCategory = 'pizza' }: Props) {
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 gap-2.5 sm:mt-8 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <MenuItemCard key={item.id} item={item} onOpen={setOpenItem} />
         ))}

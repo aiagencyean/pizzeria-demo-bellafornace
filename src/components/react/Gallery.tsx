@@ -25,14 +25,19 @@ export default function Gallery({ photos }: Props) {
 
   return (
     <>
-      <div className="grid auto-rows-[160px] grid-cols-2 gap-3 sm:auto-rows-[200px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+      {/*
+        Mobile: a small 2x2 teaser (first 4 photos only, compact rows) plus
+        a button below to pop open the full-screen gallery for the rest.
+        Desktop/tablet (sm: and up): the full masonry grid, unchanged.
+      */}
+      <div className="grid auto-rows-[100px] grid-cols-2 gap-2 sm:auto-rows-[200px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         {photos.map((photo, i) => (
           <button
             key={photo.src}
             onClick={() => setActiveIndex(i)}
-            className={`group relative overflow-hidden rounded-xl ${
-              photo.span === 'tall' ? 'row-span-2' : ''
-            } ${photo.span === 'wide' ? 'col-span-2' : ''}`}
+            className={`group relative overflow-hidden rounded-xl ${i >= 4 ? 'hidden sm:block' : ''} ${
+              photo.span === 'tall' ? 'sm:row-span-2' : ''
+            } ${photo.span === 'wide' ? 'sm:col-span-2' : ''}`}
           >
             <img
               src={photo.src}
@@ -44,6 +49,10 @@ export default function Gallery({ photos }: Props) {
           </button>
         ))}
       </div>
+
+      <button onClick={() => setActiveIndex(0)} className="btn-outline mt-4 w-full text-sm sm:hidden">
+        Alle {photos.length} Fotos ansehen
+      </button>
 
       {activeIndex !== null && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center bg-charcoal-900/90 p-4 animate-fade-in">

@@ -3,8 +3,8 @@ import DeliveryCheck from '@/components/react/DeliveryCheck';
 import { restaurant } from '@/data/restaurant.config';
 ---
 
-<section id="delivery" class="scroll-mt-24 bg-white py-20 sm:py-28">
-  <div class="container-page grid gap-12 lg:grid-cols-2 lg:items-center">
+<section id="delivery" class="scroll-mt-24 bg-white py-12 sm:py-28">
+  <div class="container-page grid gap-6 lg:grid-cols-2 lg:items-center lg:gap-12">
     <div>
       <p class="eyebrow">Liefergebiet</p>
       <h2 class="section-heading mt-3">Liefern wir zu dir?</h2>
@@ -17,7 +17,7 @@ import { restaurant } from '@/data/restaurant.config';
       </div>
     </div>
 
-    <div class="rounded-2xl bg-cream-100 p-8">
+    <div class="rounded-2xl bg-cream-100 p-5 sm:p-8">
       <p class="text-sm font-semibold text-charcoal-900">Wir liefern aktuell nach:</p>
       <div class="mt-4 flex flex-wrap gap-2">
         {restaurant.deliveryPostalCodes.map((code) => (

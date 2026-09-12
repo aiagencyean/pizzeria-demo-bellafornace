@@ -6,7 +6,7 @@ import { restaurant } from '@/data/restaurant.config';
 // Replace with real, permission-cleared customer reviews before launch.
 ---
 
-<section class="bg-cream-50 py-20 sm:py-28">
+<section class="bg-cream-50 py-12 sm:py-28">
   <div class="container-page">
     <div class="mx-auto max-w-xl text-center">
       <p class="eyebrow">Bewertungen</p>
@@ -14,9 +14,9 @@ import { restaurant } from '@/data/restaurant.config';
       <p class="mt-3 text-sm text-charcoal-900/50">Demo-Bewertungen · {restaurant.rating.value}/5 aus {restaurant.rating.count} Bewertungen</p>
     </div>
 
-    <div class="mt-12 grid gap-6 sm:grid-cols-3">
+    <div class="mt-6 grid gap-3 sm:mt-12 sm:grid-cols-3 sm:gap-6">
       {reviews.map((review) => (
-        <div class="card flex flex-col gap-4 p-7">
+        <div class="card flex flex-col gap-3 p-5 sm:gap-4 sm:p-7">
           <div class="flex text-gold-500">
             {Array.from({ length: 5 }).map((_, i) => (
               <svg viewBox="0 0 20 20" class={`h-4 w-4 fill-current ${i < review.rating ? '' : 'opacity-25'}`}>
