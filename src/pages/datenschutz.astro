@@ -1,0 +1,43 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { restaurant } from '@/data/restaurant.config';
+---
+
+<Layout title={`Datenschutz — ${restaurant.name}`}>
+  <section class="bg-cream-50 py-16">
+    <div class="container-page max-w-2xl">
+      <h1 class="section-heading">Datenschutzerklärung</h1>
+      <p class="mt-3 text-sm text-charcoal-900/50">
+        Platzhalter-Inhalt — vor Veröffentlichung durch eine vollständige, rechtsgeprüfte Datenschutzerklärung
+        (DSGVO-konform) ersetzen, insbesondere zu Bestelldaten, Cookies und eingesetzten Diensten.
+      </p>
+
+      <div class="prose prose-sm mt-8 max-w-none text-charcoal-900/80">
+        <h2 class="font-display text-lg font-semibold text-charcoal-900">1. Verantwortlicher</h2>
+        <p>
+          {restaurant.name}, {restaurant.address.street}, {restaurant.address.postalCode} {restaurant.address.city},
+          E-Mail: {restaurant.email}
+        </p>
+
+        <h2 class="mt-6 font-display text-lg font-semibold text-charcoal-900">2. Verarbeitung bei Online-Bestellungen</h2>
+        <p>
+          Bei einer Bestellung verarbeiten wir Name, Telefonnummer, E-Mail-Adresse sowie — bei Lieferung — deine
+          Adresse, um die Bestellung auszuführen und dich zu kontaktieren. [Rechtsgrundlage, Speicherdauer und
+          eingesetzte Auftragsverarbeiter hier ergänzen.]
+        </p>
+
+        <h2 class="mt-6 font-display text-lg font-semibold text-charcoal-900">3. Cookies &amp; lokale Speicherung</h2>
+        <p>
+          Für den Warenkorb nutzen wir technisch notwendige lokale Speicherung (localStorage) in deinem Browser.
+          [Details zu weiteren Cookies/Tools wie Analytics hier ergänzen, sofern eingesetzt.]
+        </p>
+
+        <h2 class="mt-6 font-display text-lg font-semibold text-charcoal-900">4. Deine Rechte</h2>
+        <p>
+          Du hast das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung deiner Daten
+          sowie ein Beschwerderecht bei einer Aufsichtsbehörde. [Kontaktweg für Anfragen ergänzen.]
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

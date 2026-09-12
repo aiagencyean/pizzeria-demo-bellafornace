@@ -1,0 +1,59 @@
+---
+import { restaurant } from '@/data/restaurant.config';
+
+const weekdayIndex = (new Date().getDay() + 6) % 7; // Monday = 0
+const today = restaurant.hours[weekdayIndex];
+---
+
+<section class="border-y border-charcoal-900/10 bg-white">
+  <div class="container-page grid grid-cols-2 gap-6 py-8 sm:grid-cols-4 sm:gap-4">
+    <div class="flex flex-col items-center gap-1 text-center sm:items-start sm:text-left">
+      <div class="flex items-center gap-1 text-gold-500">
+        {Array.from({ length: 5 }).map(() => (
+          <svg viewBox="0 0 20 20" class="h-3.5 w-3.5 fill-current"><path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg>
+        ))}
+      </div>
+      <p class="text-sm font-semibold text-charcoal-900">{restaurant.rating.value} / 5</p>
+      <p class="text-xs text-charcoal-900/50">{restaurant.rating.count} Bewertungen</p>
+    </div>
+
+    <div class="flex flex-col items-center gap-1 text-center sm:items-start sm:text-left">
+      <p id="open-status" class="flex items-center gap-1.5 text-sm font-semibold text-basil-600">
+        <span class="h-2 w-2 rounded-full bg-basil-500"></span> Heute geöffnet
+      </p>
+      <p class="text-xs text-charcoal-900/50">{today.open} – {today.close} Uhr</p>
+    </div>
+
+    <div class="flex flex-col items-center gap-1 text-center sm:items-start sm:text-left">
+      <p class="text-sm font-semibold text-charcoal-900">Lieferung &amp; Abholung</p>
+      <p class="text-xs text-charcoal-900/50">
+        Ø {restaurant.estimatedDeliveryMinutes[0]}–{restaurant.estimatedDeliveryMinutes[1]} Min.
+      </p>
+    </div>
+
+    <div class="flex flex-col items-center gap-1 text-center sm:items-start sm:text-left">
+      <p class="text-sm font-semibold text-charcoal-900">Gratis Lieferung</p>
+      <p class="text-xs text-charcoal-900/50">ab {restaurant.currency}{restaurant.freeDeliveryThreshold.toFixed(0)} Bestellwert</p>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ hours: restaurant.hours }}>
+  const statusEl = document.getElementById('open-status');
+  if (statusEl) {
+    const now = new Date();
+    const idx = (now.getDay() + 6) % 7;
+    const today = hours[idx];
+    const [oh, om] = today.open.split(':').map(Number);
+    const [ch, cm] = today.close.split(':').map(Number);
+    const minutesNow = now.getHours() * 60 + now.getMinutes();
+    const isOpen = minutesNow >= oh * 60 + om && minutesNow < ch * 60 + cm;
+    if (!isOpen) {
+      statusEl.classList.remove('text-basil-600');
+      statusEl.classList.add('text-charcoal-900/50');
+      statusEl.querySelector('span').classList.remove('bg-basil-500');
+      statusEl.querySelector('span').classList.add('bg-charcoal-900/30');
+      statusEl.lastChild.textContent = ' Aktuell geschlossen';
+    }
+  }
+</script>

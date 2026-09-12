@@ -1,0 +1,30 @@
+---
+import DeliveryCheck from '@/components/react/DeliveryCheck';
+import { restaurant } from '@/data/restaurant.config';
+---
+
+<section id="delivery" class="scroll-mt-24 bg-white py-20 sm:py-28">
+  <div class="container-page grid gap-12 lg:grid-cols-2 lg:items-center">
+    <div>
+      <p class="eyebrow">Liefergebiet</p>
+      <h2 class="section-heading mt-3">Liefern wir zu dir?</h2>
+      <p class="mt-4 max-w-md text-charcoal-900/70">
+        Gib deine Postleitzahl ein, um zu sehen, ob wir aktuell in dein Gebiet liefern.
+        Kostenlose Lieferung ab {restaurant.currency}{restaurant.freeDeliveryThreshold.toFixed(0)}.
+      </p>
+      <div class="mt-6">
+        <DeliveryCheck client:load />
+      </div>
+    </div>
+
+    <div class="rounded-2xl bg-cream-100 p-8">
+      <p class="text-sm font-semibold text-charcoal-900">Wir liefern aktuell nach:</p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {restaurant.deliveryPostalCodes.map((code) => (
+          <span class="rounded-full bg-white px-3.5 py-1.5 text-sm font-medium text-charcoal-900 shadow-card">{code}</span>
+        ))}
+      </div>
+      <p class="mt-5 text-xs text-charcoal-900/50">Liefergebiete werden regelmäßig erweitert.</p>
+    </div>
+  </div>
+</section>

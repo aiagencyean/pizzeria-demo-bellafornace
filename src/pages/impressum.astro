@@ -1,0 +1,45 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { restaurant } from '@/data/restaurant.config';
+---
+
+<Layout title={`Impressum — ${restaurant.name}`}>
+  <section class="bg-cream-50 py-16">
+    <div class="container-page max-w-2xl">
+      <h1 class="section-heading">Impressum</h1>
+      <p class="mt-3 text-sm text-charcoal-900/50">
+        Platzhalter-Inhalt gemäß § 5 TMG — vor Veröffentlichung durch echte, rechtsverbindliche Angaben ersetzen.
+      </p>
+
+      <div class="prose prose-sm mt-8 max-w-none text-charcoal-900/80">
+        <p>
+          {restaurant.name}<br />
+          {restaurant.address.street}<br />
+          {restaurant.address.postalCode} {restaurant.address.city}<br />
+          {restaurant.address.countryLabel}
+        </p>
+
+        <p class="mt-6">
+          <strong>Vertreten durch:</strong><br />
+          [Name der/des Geschäftsführenden]
+        </p>
+
+        <p class="mt-6">
+          <strong>Kontakt:</strong><br />
+          Telefon: {restaurant.phoneDisplay}<br />
+          E-Mail: {restaurant.email}
+        </p>
+
+        <p class="mt-6">
+          <strong>Umsatzsteuer-ID:</strong><br />
+          [USt-IdNr. gemäß § 27 a Umsatzsteuergesetz]
+        </p>
+
+        <p class="mt-6">
+          <strong>Registereintrag:</strong><br />
+          [Handelsregister, Registergericht, Registernummer — falls zutreffend]
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

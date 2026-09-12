@@ -1,0 +1,13 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import OrderConfirmation from '@/components/react/OrderConfirmation';
+import { restaurant } from '@/data/restaurant.config';
+---
+
+<Layout title={`Bestellung bestätigt — ${restaurant.name}`}>
+  <section class="bg-cream-50 py-14 sm:py-20">
+    <div class="container-page">
+      <OrderConfirmation client:only="react" />
+    </div>
+  </section>
+</Layout>

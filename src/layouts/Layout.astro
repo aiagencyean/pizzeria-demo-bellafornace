@@ -1,0 +1,106 @@
+---
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import CartDrawer from '@/components/react/CartDrawer';
+import { restaurant } from '@/data/restaurant.config';
+import '@/styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = restaurant.seo.siteTitle,
+  description = restaurant.seo.description,
+  ogImage = restaurant.seo.ogImage,
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  name: restaurant.name,
+  image: new URL(restaurant.seo.ogImage, Astro.site).toString(),
+  telephone: restaurant.phone,
+  servesCuisine: 'Italian',
+  priceRange: '€€',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: restaurant.address.street,
+    postalCode: restaurant.address.postalCode,
+    addressLocality: restaurant.address.city,
+    addressCountry: restaurant.address.country,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: restaurant.mapCoordinates.lat,
+    longitude: restaurant.mapCoordinates.lng,
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: restaurant.rating.value,
+    reviewCount: restaurant.rating.count,
+  },
+  openingHoursSpecification: restaurant.hours.map((h) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: h.day,
+    opens: h.open,
+    closes: h.close,
+  })),
+};
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="restaurant.restaurant" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={restaurant.seo.locale} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+
+    <!-- Local business structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-charcoal-900 focus:px-4 focus:py-2 focus:text-cream-50"
+    >
+      Zum Inhalt springen
+    </a>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <CartDrawer client:only="react" />
+  </body>
+</html>

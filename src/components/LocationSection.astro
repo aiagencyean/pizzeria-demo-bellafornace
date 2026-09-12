@@ -1,0 +1,59 @@
+---
+import { restaurant } from '@/data/restaurant.config';
+---
+
+<section id="standort" class="scroll-mt-24 bg-cream-100 py-20 sm:py-28">
+  <div class="container-page grid gap-10 lg:grid-cols-2 lg:gap-16">
+    <div>
+      <p class="eyebrow">Besuch uns</p>
+      <h2 class="section-heading mt-3">Finde uns in {restaurant.address.city}</h2>
+
+      <dl class="mt-8 space-y-5 text-charcoal-900">
+        <div class="flex gap-3">
+          <dt class="mt-0.5 text-tomato-500">📍</dt>
+          <dd>{restaurant.address.street}<br />{restaurant.address.postalCode} {restaurant.address.city}</dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="mt-0.5 text-tomato-500">📞</dt>
+          <dd><a href={`tel:${restaurant.phone}`} class="hover:text-tomato-600">{restaurant.phoneDisplay}</a></dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="mt-0.5 text-tomato-500">🕐</dt>
+          <dd>
+            <ul class="space-y-1 text-sm text-charcoal-900/70">
+              {restaurant.hours.map((h) => (
+                <li class="flex gap-4"><span class="w-24">{h.day}</span><span>{h.open} – {h.close} Uhr</span></li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+      </dl>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href={restaurant.googleMapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-secondary"
+        >
+          Route planen
+        </a>
+        <a href={`tel:${restaurant.phone}`} class="btn-outline">Anrufen</a>
+        <a href="/menu" class="btn-primary">Online bestellen</a>
+      </div>
+    </div>
+
+    <!--
+      Map placeholder — swap this block for a real Google Maps / Mapbox
+      embed using restaurant.mapCoordinates once an API key is available.
+    -->
+    <div class="relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-2xl bg-charcoal-900/5 shadow-card">
+      <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 1px 1px, rgba(28,26,23,0.15) 1px, transparent 0); background-size: 24px 24px;"></div>
+      <div class="relative flex flex-col items-center gap-2 text-center">
+        <span class="flex h-12 w-12 items-center justify-center rounded-full bg-tomato-500 text-2xl text-white shadow-lifted">📍</span>
+        <p class="font-display text-lg font-semibold text-charcoal-900">{restaurant.address.street}</p>
+        <p class="text-sm text-charcoal-900/60">Kartenintegration folgt</p>
+      </div>
+    </div>
+  </div>
+</section>

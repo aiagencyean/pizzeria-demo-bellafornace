@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream-50 text-charcoal-900 font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+
+  ::selection {
+    @apply bg-tomato-500/20;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-wide transition-all duration-200 ease-out active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-tomato-500 text-white shadow-card hover:bg-tomato-600 hover:shadow-lifted;
+  }
+
+  .btn-secondary {
+    @apply btn bg-charcoal-900 text-cream-50 hover:bg-charcoal-800;
+  }
+
+  .btn-outline {
+    @apply btn border border-charcoal-900/15 bg-transparent text-charcoal-900 hover:border-charcoal-900/30 hover:bg-charcoal-900/[0.03];
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-charcoal-900 hover:bg-charcoal-900/5;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-tomato-600;
+  }
+
+  .section-heading {
+    @apply text-3xl font-medium leading-tight text-charcoal-900 sm:text-4xl;
+  }
+
+  .card {
+    @apply rounded-xl2 bg-white shadow-card ring-1 ring-charcoal-900/[0.04];
+  }
+}
+
+/* Reduced motion: respect user preference across the whole site */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

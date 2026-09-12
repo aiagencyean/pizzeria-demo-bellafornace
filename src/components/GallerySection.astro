@@ -1,0 +1,16 @@
+---
+import Gallery from '@/components/react/Gallery';
+import { galleryPhotos } from '@/data/gallery';
+---
+
+<section id="galerie" class="scroll-mt-24 bg-cream-100 py-20 sm:py-28">
+  <div class="container-page">
+    <div class="mx-auto max-w-xl text-center">
+      <p class="eyebrow">Impressionen</p>
+      <h2 class="section-heading mt-3">Ein Blick in unsere Küche</h2>
+    </div>
+    <div class="mt-12">
+      <Gallery client:visible photos={galleryPhotos} />
+    </div>
+  </div>
+</section>

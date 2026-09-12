@@ -1,0 +1,22 @@
+---
+import MenuApp from '@/components/react/MenuApp';
+
+interface Props {
+  heading?: string;
+  showEyebrow?: boolean;
+}
+
+const { heading = 'Unsere Speisekarte', showEyebrow = true } = Astro.props;
+---
+
+<section id="speisekarte" class="scroll-mt-20 bg-cream-50 py-20 sm:py-28">
+  <div class="container-page">
+    <div class="mx-auto max-w-xl text-center">
+      {showEyebrow && <p class="eyebrow">Frisch zubereitet</p>}
+      <h2 class="section-heading mt-3">{heading}</h2>
+    </div>
+    <div class="mt-10">
+      <MenuApp client:load />
+    </div>
+  </div>
+</section>

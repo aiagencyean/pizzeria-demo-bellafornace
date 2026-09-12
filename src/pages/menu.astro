@@ -1,0 +1,20 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import MenuApp from '@/components/react/MenuApp';
+import { restaurant } from '@/data/restaurant.config';
+---
+
+<Layout title={`Speisekarte — ${restaurant.name}`} description="Handgemachte Pizza, Pasta, Salate und mehr — jetzt online bestellen.">
+  <section class="bg-cream-50 pb-20 pt-14 sm:pt-20">
+    <div class="container-page">
+      <div class="mx-auto max-w-xl text-center">
+        <p class="eyebrow">Speisekarte</p>
+        <h1 class="section-heading mt-3">Alles, was du bestellen kannst</h1>
+        <p class="mt-3 text-charcoal-900/60">Für Lieferung oder Abholung — wähle deine Größe und Extras direkt beim Bestellen.</p>
+      </div>
+      <div class="mt-10">
+        <MenuApp client:load />
+      </div>
+    </div>
+  </section>
+</Layout>

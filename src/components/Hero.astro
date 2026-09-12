@@ -1,0 +1,52 @@
+---
+import { restaurant } from '@/data/restaurant.config';
+---
+
+<section class="relative overflow-hidden bg-cream-50">
+  <div class="container-page grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-2 lg:py-28">
+    <div class="relative z-10 max-w-xl animate-slide-up">
+      <p class="eyebrow">Wood-fired · seit {restaurant.founded}</p>
+      <h1 class="mt-4 text-5xl font-medium leading-[1.05] text-charcoal-900 sm:text-6xl lg:text-[3.75rem]">
+        {restaurant.tagline}
+      </h1>
+      <p class="mt-6 max-w-md text-lg text-charcoal-900/70">
+        48 Stunden gereifter Teig, San-Marzano-Tomaten und frische Mozzarella —
+        gebacken im Holzofen, geliefert direkt zu dir.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a href="/menu" class="btn-primary text-base">Jetzt bestellen</a>
+        <a href="/menu" class="btn-outline text-base">Speisekarte ansehen</a>
+      </div>
+
+      <div class="mt-10 flex items-center gap-6 text-sm text-charcoal-900/60">
+        <div class="flex items-center gap-1.5">
+          <span class="flex text-gold-500">
+            {Array.from({ length: 5 }).map(() => (
+              <svg viewBox="0 0 20 20" class="h-4 w-4 fill-current"><path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg>
+            ))}
+          </span>
+          <span class="font-medium text-charcoal-900">{restaurant.rating.value}/5</span>
+          <span>({restaurant.rating.count})</span>
+        </div>
+        <span class="h-4 w-px bg-charcoal-900/15"></span>
+        <span>Lieferung &amp; Abholung</span>
+      </div>
+    </div>
+
+    <div class="relative animate-fade-in [animation-delay:150ms]">
+      <div class="relative mx-auto aspect-square w-full max-w-[520px]">
+        <div class="absolute inset-6 rounded-full bg-tomato-400/20 blur-3xl" aria-hidden="true"></div>
+        <img
+          src="/images/hero-margherita.jpg"
+          alt="Frisch gebackene Margherita Pizza mit Basilikum, direkt aus dem Holzofen"
+          class="relative h-full w-full rounded-[2.5rem] object-cover shadow-lifted"
+          fetchpriority="high"
+        />
+        <div class="absolute -bottom-6 -left-6 hidden rounded-2xl bg-white px-5 py-4 shadow-lifted sm:block">
+          <p class="text-xs font-medium text-charcoal-900/50">Heute geöffnet</p>
+          <p class="font-display text-lg font-semibold text-charcoal-900">11:00 – 22:00</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

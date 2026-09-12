@@ -1,0 +1,90 @@
+---
+import CartButton from '@/components/react/CartButton';
+import { restaurant } from '@/data/restaurant.config';
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Speisekarte', href: '/menu' },
+  { label: 'Über uns', href: '/#about' },
+  { label: 'Lieferung', href: '/#delivery' },
+  { label: 'Kontakt', href: '/#standort' },
+];
+---
+
+<header id="site-header" class="sticky top-0 z-40 border-b border-transparent bg-cream-50/80 backdrop-blur-md transition-colors">
+  <div class="container-page flex h-[72px] items-center justify-between">
+    <a href="/" class="flex items-center gap-2.5 shrink-0">
+      <span class="flex h-9 w-9 items-center justify-center rounded-full bg-tomato-500 text-cream-50">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none">
+          <path d="M12 3 L21 19 A11 11 0 0 1 3 19 Z" fill="currentColor" />
+        </svg>
+      </span>
+      <span class="font-display text-xl font-semibold tracking-tight text-charcoal-900">{restaurant.name}</span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-8">
+      {navItems.map((item) => (
+        <a href={item.href} class="text-sm font-medium text-charcoal-900/80 transition-colors hover:text-tomato-600">
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="/menu" class="btn-primary hidden sm:inline-flex">Jetzt bestellen</a>
+      <CartButton client:only="react" />
+      <button
+        id="mobile-menu-toggle"
+        type="button"
+        aria-label="Menü öffnen"
+        aria-expanded="false"
+        class="lg:hidden flex h-10 w-10 items-center justify-center rounded-full text-charcoal-900 hover:bg-charcoal-900/5"
+      >
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-charcoal-900/10 bg-cream-50">
+    <nav class="container-page flex flex-col py-3">
+      {navItems.map((item) => (
+        <a href={item.href} class="py-3 text-base font-medium text-charcoal-900 border-b border-charcoal-900/5 last:border-0">
+          {item.label}
+        </a>
+      ))}
+      <a href="/menu" class="btn-primary mt-4 mb-2">Jetzt bestellen</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header');
+  const onScroll = () => {
+    if (!header) return;
+    if (window.scrollY > 8) {
+      header.classList.add('shadow-card', 'border-charcoal-900/[0.06]');
+    } else {
+      header.classList.remove('shadow-card', 'border-charcoal-900/[0.06]');
+    }
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.contains('hidden') === false;
+    menu?.classList.toggle('hidden');
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+
+  // Close mobile menu on navigation (helps when linking to in-page anchors)
+  menu?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      toggle?.setAttribute('aria-expanded', 'false');
+    })
+  );
+</script>

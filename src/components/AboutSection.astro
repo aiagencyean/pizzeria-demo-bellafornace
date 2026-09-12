@@ -1,0 +1,35 @@
+---
+import { restaurant } from '@/data/restaurant.config';
+---
+
+<section id="about" class="scroll-mt-24 bg-cream-50 py-20 sm:py-28">
+  <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+    <div class="grid grid-cols-2 gap-4">
+      <img
+        src="/images/pizza-dough-fresh.jpg"
+        alt="Handgeformter Pizzateig, bereit für den Ofen"
+        class="col-span-2 aspect-[16/10] w-full rounded-2xl object-cover shadow-card"
+        loading="lazy"
+      />
+      <img
+        src="/images/gallery-guest-enjoying.jpg"
+        alt="Gast genießt sein Essen im Restaurant"
+        class="aspect-[3/4] w-full rounded-2xl object-cover shadow-card"
+        loading="lazy"
+      />
+      <img
+        src="/images/gallery-interior-warm.jpg"
+        alt="Warmer, einladender Gastraum"
+        class="aspect-[3/4] w-full rounded-2xl object-cover shadow-card"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="max-w-lg">
+      <p class="eyebrow">Unsere Geschichte</p>
+      <h2 class="section-heading mt-3">{restaurant.story.heading}</h2>
+      <p class="mt-5 text-charcoal-900/70">{restaurant.story.body}</p>
+      <a href="/menu" class="btn-secondary mt-8">Speisekarte entdecken</a>
+    </div>
+  </div>
+</section>
