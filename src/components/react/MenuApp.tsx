@@ -16,7 +16,13 @@ export default function MenuApp({ initialCategory = 'pizza' }: Props) {
 
   return (
     <div>
-      <div className="sticky top-[72px] z-30 -mx-5 overflow-x-auto bg-cream-50/95 px-5 py-3 backdrop-blur-md sm:mx-0 sm:rounded-full sm:bg-transparent sm:px-0 sm:py-0 sm:backdrop-blur-none">
+      {/*
+        Mobile: plain, non-sticky pill row (a second sticky bar stacked
+        under the header felt heavy on small screens). Desktop/tablet
+        (sm: and up) keep the original sticky, floating-pill treatment
+        unchanged.
+      */}
+      <div className="-mx-5 overflow-x-auto px-5 py-3 sm:sticky sm:top-[72px] sm:z-30 sm:mx-0 sm:rounded-full sm:bg-transparent sm:px-0 sm:py-0 sm:backdrop-blur-none">
         <div className="flex gap-2 sm:flex-wrap sm:justify-center">
           {categories.map((cat) => (
             <button

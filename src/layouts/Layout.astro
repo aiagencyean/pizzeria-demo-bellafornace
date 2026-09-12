@@ -2,6 +2,7 @@
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import CartDrawer from '@/components/react/CartDrawer';
+import MobileOrderBar from '@/components/react/MobileOrderBar';
 import { restaurant } from '@/data/restaurant.config';
 import '@/styles/global.css';
 
@@ -9,12 +10,15 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** Checkout has its own bottom action bar already — skip the global one there. */
+  hideMobileOrderBar?: boolean;
 }
 
 const {
   title = restaurant.seo.siteTitle,
   description = restaurant.seo.description,
   ogImage = restaurant.seo.ogImage,
+  hideMobileOrderBar = false,
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
@@ -89,7 +93,7 @@ const structuredData = {
       rel="stylesheet"
     />
   </head>
-  <body class="min-h-screen">
+  <body class:list={['min-h-screen', !hideMobileOrderBar && 'pb-20 sm:pb-0']}>
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-charcoal-900 focus:px-4 focus:py-2 focus:text-cream-50"
@@ -102,5 +106,6 @@ const structuredData = {
     </main>
     <Footer />
     <CartDrawer client:only="react" />
+    {!hideMobileOrderBar && <MobileOrderBar client:only="react" />}
   </body>
 </html>
