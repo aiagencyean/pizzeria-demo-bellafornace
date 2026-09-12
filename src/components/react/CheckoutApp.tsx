@@ -235,7 +235,7 @@ export default function CheckoutApp() {
               onChange={(e) => setSpecialInstructions(e.target.value)}
               placeholder='z. B. "Bitte zweimal klingeln."'
               rows={2}
-              className="mt-1.5 w-full rounded-xl border border-charcoal-900/15 bg-white px-4 py-3 text-sm outline-none focus:border-tomato-500"
+              className="mt-1.5 w-full rounded-xl border border-charcoal-900/15 bg-white px-4 py-3 text-base outline-none focus:border-tomato-500 sm:text-sm"
             />
           </label>
         </section>
@@ -379,7 +379,9 @@ function TextField({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`mt-1.5 w-full rounded-xl border bg-white px-4 py-3 text-sm outline-none focus:border-tomato-500 ${
+        // text-base (16px) on mobile is required — anything smaller makes
+        // iOS Safari zoom in on focus and never zoom back out.
+        className={`mt-1.5 w-full rounded-xl border bg-white px-4 py-3 text-base outline-none focus:border-tomato-500 sm:text-sm ${
           error ? 'border-tomato-500' : 'border-charcoal-900/15'
         }`}
       />

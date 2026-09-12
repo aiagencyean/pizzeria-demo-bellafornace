@@ -23,7 +23,7 @@ export default function DeliveryCheck() {
           }}
           inputMode="numeric"
           placeholder="Postleitzahl eingeben"
-          className="w-full rounded-full border border-charcoal-900/15 bg-white px-5 py-3 text-sm outline-none focus:border-tomato-500"
+          className="w-full rounded-full border border-charcoal-900/15 bg-white px-5 py-3 text-base outline-none focus:border-tomato-500 sm:text-sm"
         />
         <button type="submit" className="btn-primary shrink-0">
           Prüfen
