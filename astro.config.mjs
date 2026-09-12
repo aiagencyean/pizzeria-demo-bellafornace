@@ -8,7 +8,7 @@ import vercel from '@astrojs/vercel/serverless';
 // with `export const prerender = false`. Deployed on Vercel — swap the
 // adapter (e.g. for @astrojs/node) if self-hosting elsewhere instead.
 export default defineConfig({
-  site: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://www.example-pizzeria.test',
+  site: 'https://pizzeria-template-ruddy.vercel.app',
   output: 'hybrid',
   adapter: vercel(),
   integrations: [react(), tailwind({ applyBaseStyles: false })],
