@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { addToCart, cartStore, cartSubtotal, clearCart, deliveryFeeFor, removeLine, setLineQuantity } from '@/lib/cart';
-import { nextOrderNumber, saveOrder, type DeliveryAddress, type Fulfilment, type Order, type PaymentMethod } from '@/lib/orders';
+import { createOrder, type DeliveryAddress, type Fulfilment, type PaymentMethod } from '@/lib/orders';
 import { formatPrice } from '@/lib/format';
 import { restaurant } from '@/data/restaurant.config';
 import { getItemById, getItemsByCategory, type MenuCategory } from '@/data/menu';
@@ -32,6 +32,7 @@ export default function CheckoutApp() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const deliveryFee = deliveryFeeFor(subtotal, fulfilment);
   const total = subtotal + deliveryFee;
@@ -75,37 +76,30 @@ export default function CheckoutApp() {
     if (belowMinimum || outsideDeliveryArea) return;
 
     setSubmitting(true);
-    const id = nextOrderNumber();
-    const order: Order = {
-      id,
-      createdAt: new Date().toISOString(),
-      status: 'new',
-      fulfilment,
-      paymentMethod,
-      contact: { firstName: address.firstName, lastName: address.lastName, phone: address.phone, email },
-      address: fulfilment === 'delivery' ? address : undefined,
-      specialInstructions: specialInstructions.trim() || undefined,
-      items: lines,
-      subtotal,
-      deliveryFee,
-      total,
-    };
-
-    saveOrder(order);
+    setSubmitError('');
 
     try {
-      await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(order),
+      // Created server-side (id assigned there) and stored in shared Blob
+      // storage — this is what lets a phone placing the order and a PC on
+      // the kitchen dashboard see the same order, on any network.
+      const { order } = await createOrder({
+        fulfilment,
+        paymentMethod,
+        contact: { firstName: address.firstName, lastName: address.lastName, phone: address.phone, email },
+        address: fulfilment === 'delivery' ? address : undefined,
+        specialInstructions: specialInstructions.trim() || undefined,
+        items: lines,
+        subtotal,
+        deliveryFee,
+        total,
       });
-    } catch {
-      // Order is already saved locally; email notification is best-effort
-      // for this demo and shouldn't block the customer's confirmation.
-    }
 
-    clearCart();
-    window.location.href = `/order-confirmed?order=${id}`;
+      clearCart();
+      window.location.href = `/order-confirmed?order=${order.id}`;
+    } catch {
+      setSubmitError('Bestellung konnte nicht übermittelt werden. Bitte prüfe deine Internetverbindung und versuche es erneut.');
+      setSubmitting(false);
+    }
   };
 
   if (lines.length === 0) {
@@ -334,6 +328,8 @@ export default function CheckoutApp() {
           </p>
         )}
 
+        {submitError && <p className="mt-3 text-xs font-medium text-tomato-600">{submitError}</p>}
+
         <button
           onClick={placeOrder}
           disabled={submitting || belowMinimum || outsideDeliveryArea}
@@ -345,6 +341,7 @@ export default function CheckoutApp() {
 
       {/* Mobile sticky order bar */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-charcoal-900/10 bg-cream-50/95 p-4 backdrop-blur-md lg:hidden">
+        {submitError && <p className="mb-2 text-xs font-medium text-tomato-600">{submitError}</p>}
         <button
           onClick={placeOrder}
           disabled={submitting || belowMinimum || outsideDeliveryArea}

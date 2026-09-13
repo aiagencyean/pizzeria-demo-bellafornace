@@ -1,13 +1,27 @@
+import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { ordersStore, orderStatusLabels, statusStepsFor, updateOrderStatus, type Order, type OrderStatus } from '@/lib/orders';
+import { ordersStore, orderStatusLabels, startOrderPolling, statusStepsFor, updateOrderStatus, type Order, type OrderStatus } from '@/lib/orders';
 import { formatPrice } from '@/lib/format';
 
 const columns: OrderStatus[] = ['new', 'preparing', 'ready', 'out_for_delivery', 'completed'];
 
 export default function DashboardApp() {
   const orders = useStore(ordersStore);
+  const [loaded, setLoaded] = useState(false);
 
-  if (orders.length === 0) {
+  // Orders live in shared Blob storage now (not localStorage), so this
+  // polls for changes made from any device — a customer's phone included.
+  useEffect(() => {
+    setLoaded(false);
+    const stop = startOrderPolling();
+    const markLoaded = setTimeout(() => setLoaded(true), 400);
+    return () => {
+      stop();
+      clearTimeout(markLoaded);
+    };
+  }, []);
+
+  if (loaded && orders.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-24 text-center">
         <p className="text-4xl">🧾</p>
@@ -16,6 +30,8 @@ export default function DashboardApp() {
       </div>
     );
   }
+
+  if (!loaded) return null;
 
   return (
     <div className="grid grid-cols-1 gap-5 overflow-x-auto pb-4 sm:grid-cols-2 xl:grid-cols-5 xl:gap-4">

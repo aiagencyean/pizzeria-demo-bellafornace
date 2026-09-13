@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { ordersStore, statusStepsFor, type OrderStatus } from '@/lib/orders';
+import { ordersStore, startOrderPolling, statusStepsFor, type OrderStatus } from '@/lib/orders';
 import { formatPrice } from '@/lib/format';
 import { restaurant } from '@/data/restaurant.config';
 
@@ -18,18 +18,24 @@ export default function OrderConfirmation() {
   const [orderId, setOrderId] = useState('');
   const [loaded, setLoaded] = useState(false);
 
+  // Live status: orders live in shared Blob storage (src/pages/api/orders.ts),
+  // not localStorage, so this works even when the kitchen is on a
+  // completely different device/network than the customer. We poll every
+  // few seconds — as soon as staff tick off the next step on /dashboard,
+  // it shows up here shortly after, no refresh needed.
   useEffect(() => {
     setOrderId(new URLSearchParams(window.location.search).get('order') ?? '');
-    setLoaded(true);
+    const stop = startOrderPolling();
+    // Give the first fetch a moment to land before treating "no match yet"
+    // as "this order doesn't exist" — avoids a flash of the not-found state
+    // right after checkout redirects here.
+    const markLoaded = setTimeout(() => setLoaded(true), 900);
+    return () => {
+      stop();
+      clearTimeout(markLoaded);
+    };
   }, []);
 
-  // Live status: this reads the same shared order store the kitchen page
-  // (/dashboard) writes to. @nanostores/persistent syncs localStorage
-  // changes across browser tabs automatically, so as soon as staff ticks
-  // off the next step on /dashboard in another tab, this page updates on
-  // its own — no polling or refresh needed. (A production build would
-  // back this with a real database + realtime channel instead of
-  // localStorage, so it also works across separate devices.)
   const orders = useStore(ordersStore);
   const order = orders.find((o) => o.id === orderId);
 

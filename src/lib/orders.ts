@@ -1,4 +1,4 @@
-import { persistentAtom } from '@nanostores/persistent';
+import { atom } from 'nanostores';
 import type { CartLine } from '@/lib/cart';
 
 export type OrderStatus = 'new' | 'preparing' | 'ready' | 'out_for_delivery' | 'completed';
@@ -52,43 +52,82 @@ export interface Order {
   total: number;
 }
 
-// ── Demo "database" ──────────────────────────────────────────────────
-// This is a client-side, localStorage-backed store standing in for a real
-// backend/database. It lets the /dashboard page demonstrate the restaurant
-// order-management flow without provisioning infrastructure. Swap this
-// module for real API calls (e.g. to /api/orders backed by a database)
-// when connecting the template to production systems.
+/** Everything needed to create an order — the server assigns id/createdAt/status. */
+export type NewOrderInput = Omit<Order, 'id' | 'createdAt' | 'status'>;
 
-const ordersStore = persistentAtom<Order[]>('bella-fornace:orders', [], {
-  encode: JSON.stringify,
-  decode: JSON.parse,
-});
+// ── Shared "database" ────────────────────────────────────────────────
+// Orders live in Vercel Blob storage (see src/pages/api/orders.ts), so the
+// customer's phone and the restaurant's kitchen screen see the same data
+// even on different devices/networks. This client-side store is just a
+// local cache kept fresh by polling — it's what the UI actually reads
+// reactively via useStore().
 
-const orderCounter = persistentAtom<number>('bella-fornace:order-counter', 1048, {
-  encode: String,
-  decode: Number,
-});
+export const ordersStore = atom<Order[]>([]);
 
-export function nextOrderNumber(): string {
-  const next = orderCounter.get() + 1;
-  orderCounter.set(next);
-  return String(next);
+async function fetchOrders(): Promise<Order[]> {
+  try {
+    const res = await fetch('/api/orders', { cache: 'no-store' });
+    if (!res.ok) return ordersStore.get();
+    const data = await res.json();
+    return data.orders ?? [];
+  } catch {
+    return ordersStore.get();
+  }
 }
 
-export function saveOrder(order: Order) {
-  ordersStore.set([order, ...ordersStore.get()]);
+/**
+ * Starts polling /api/orders so the dashboard and the customer's live
+ * status page pick up changes made from any other device. Call from a
+ * useEffect and use the returned function to stop polling on unmount.
+ */
+export function startOrderPolling(intervalMs = 3000): () => void {
+  let cancelled = false;
+  const tick = async () => {
+    const orders = await fetchOrders();
+    if (!cancelled) ordersStore.set(orders);
+  };
+  tick();
+  const id = window.setInterval(tick, intervalMs);
+  return () => {
+    cancelled = true;
+    window.clearInterval(id);
+  };
 }
 
-export function getOrders(): Order[] {
-  return ordersStore.get();
+export interface CreateOrderResult {
+  order: Order;
+  demoMode: boolean;
+  sent: boolean;
+}
+
+/** Creates the order server-side (id assigned there) and returns it. */
+export async function createOrder(input: NewOrderInput): Promise<CreateOrderResult> {
+  const res = await fetch('/api/orders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) throw new Error('Bestellung konnte nicht übermittelt werden.');
+  const data = await res.json();
+  ordersStore.set([data.order, ...ordersStore.get()]);
+  return data;
 }
 
 export function getOrderById(id: string): Order | undefined {
   return ordersStore.get().find((o) => o.id === id);
 }
 
-export function updateOrderStatus(id: string, status: OrderStatus) {
+export async function updateOrderStatus(id: string, status: OrderStatus) {
+  // Optimistic local update so the tap feels instant; polling reconciles
+  // it (and propagates it to other devices) shortly after.
   ordersStore.set(ordersStore.get().map((o) => (o.id === id ? { ...o, status } : o)));
+  try {
+    await fetch('/api/orders', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, status }),
+    });
+  } catch {
+    // Best-effort — the next successful poll will reflect the real state.
+  }
 }
-
-export { ordersStore };
