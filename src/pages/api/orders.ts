@@ -113,3 +113,19 @@ export const PATCH: APIRoute = async ({ request }) => {
     headers: { 'Content-Type': 'application/json' },
   });
 };
+
+// Clears every order (used by the "Testbestellungen zurücksetzen" button on
+// /dashboard, e.g. before showing this demo to a new restaurant). Keeps the
+// order-number counter running rather than resetting it, so numbering stays
+// sane across demos. Gated only by a confirm dialog client-side — fine for
+// a sales-demo tool, not something to leave unprotected on real order data.
+export const DELETE: APIRoute = async () => {
+  const data = await readOrdersData();
+  data.orders = [];
+  await writeOrdersData(data);
+
+  return new Response(JSON.stringify({ ok: true }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+  });
+};

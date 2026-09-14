@@ -131,3 +131,9 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
     // Best-effort — the next successful poll will reflect the real state.
   }
 }
+
+/** Clears every order — e.g. before showing this demo to a new restaurant. */
+export async function resetAllOrders() {
+  ordersStore.set([]);
+  await fetch('/api/orders', { method: 'DELETE' });
+}

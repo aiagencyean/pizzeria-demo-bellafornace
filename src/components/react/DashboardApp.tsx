@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { ordersStore, orderStatusLabels, startOrderPolling, statusStepsFor, updateOrderStatus, type Order, type OrderStatus } from '@/lib/orders';
+import {
+  ordersStore,
+  orderStatusLabels,
+  resetAllOrders,
+  startOrderPolling,
+  statusStepsFor,
+  updateOrderStatus,
+  type Order,
+  type OrderStatus,
+} from '@/lib/orders';
 import { formatPrice } from '@/lib/format';
 
 const columns: OrderStatus[] = ['new', 'preparing', 'ready', 'out_for_delivery', 'completed'];
@@ -8,6 +17,7 @@ const columns: OrderStatus[] = ['new', 'preparing', 'ready', 'out_for_delivery',
 export default function DashboardApp() {
   const orders = useStore(ordersStore);
   const [loaded, setLoaded] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   // Orders live in shared Blob storage now (not localStorage), so this
   // polls for changes made from any device — a customer's phone included.
@@ -21,7 +31,19 @@ export default function DashboardApp() {
     };
   }, []);
 
-  if (loaded && orders.length === 0) {
+  const handleReset = async () => {
+    if (!window.confirm('Wirklich ALLE Bestellungen löschen? Das kann nicht rückgängig gemacht werden.')) return;
+    setResetting(true);
+    try {
+      await resetAllOrders();
+    } finally {
+      setResetting(false);
+    }
+  };
+
+  if (!loaded) return null;
+
+  if (orders.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-24 text-center">
         <p className="text-4xl">🧾</p>
@@ -31,11 +53,18 @@ export default function DashboardApp() {
     );
   }
 
-  if (!loaded) return null;
-
   return (
-    <div className="grid grid-cols-1 gap-5 overflow-x-auto pb-4 sm:grid-cols-2 xl:grid-cols-5 xl:gap-4">
-      {columns.map((status) => {
+    <div>
+      {/* Clears every order — handy before showing this demo to a new
+          restaurant so leftover test orders from other demos don't show up. */}
+      <div className="mb-5 flex justify-end">
+        <button onClick={handleReset} disabled={resetting} className="btn-outline text-xs">
+          {resetting ? 'Wird zurückgesetzt…' : 'Testbestellungen zurücksetzen'}
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 overflow-x-auto pb-4 sm:grid-cols-2 xl:grid-cols-5 xl:gap-4">
+        {columns.map((status) => {
         const columnOrders = orders.filter((o) => o.status === status);
         return (
           <div key={status} className="min-w-0">
@@ -57,7 +86,8 @@ export default function DashboardApp() {
             </div>
           </div>
         );
-      })}
+        })}
+      </div>
     </div>
   );
 }
